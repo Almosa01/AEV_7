@@ -1,4 +1,4 @@
-﻿namespace AEV7
+﻿namespace aev7
 {
     partial class Form1
     {

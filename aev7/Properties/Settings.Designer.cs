@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AEV7.Properties
+namespace aev7.Properties
 {
 
 

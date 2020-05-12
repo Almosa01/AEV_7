@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A73AB40A-C03B-40BA-B24B-437361800444}</ProjectGuid>
+    <ProjectGuid>{16DCFCD6-C6A6-44FF-BD0C-EB432E4B6635}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>AEV7</RootNamespace>
-    <AssemblyName>AEV7</AssemblyName>
+    <RootNamespace>aev7</RootNamespace>
+    <AssemblyName>aev7</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
