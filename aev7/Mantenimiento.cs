@@ -10,16 +10,13 @@ using System.Windows.Forms;
 
 namespace aev7
 {
-    public partial class Form1 : Form
+    public partial class Mantenimiento : Form
     {
-        public Form1()
+        public Mantenimiento()
         {
             InitializeComponent();
         }
 
-        private void btnMantenimiento_Click(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }
