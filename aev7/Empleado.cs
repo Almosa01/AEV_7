@@ -14,8 +14,9 @@ namespace aev7
         private string nif;
         private string nombre;
         private string apellidos;
-        private bool administrador;
-        private DateTime tiempoTrabajando;
+        private byte administrador;
+        //private DateTime tiempoTrabajando;
+        private string contraseña;
 
         public string Nif { get { return nif; } set { nif = value; } }
 
@@ -23,16 +24,22 @@ namespace aev7
 
         public string Apellidos { get { return apellidos; } set { apellidos = value; } }
 
-        public bool Administrador { get { return administrador; } set { administrador = value; } }
+        public byte Administrador { get { return administrador; } set { administrador = value; } }
 
-        public DateTime TiempoTrabajando { get { return tiempoTrabajando; } set { tiempoTrabajando = value; } }
+        //public DateTime TiempoTrabajando { get { return tiempoTrabajando; } set { tiempoTrabajando = value; } }
+
+        public string Contraseña { get { return contraseña; } set { contraseña = value; } }
 
 
 
 
-        public Empleado(string ni,string nom, string apell, bool admin,DateTime tiempo)
+        public Empleado(string ni,string nom, string apell, byte admin,string contra)
         {
-          
+            nif = ni;
+            nombre = nom;
+            apellidos = apell;
+            administrador = admin;
+            contraseña = contra;
         }
         public Empleado()
         {
@@ -55,18 +62,46 @@ namespace aev7
             return false;
         }
 
-        public int AgregarEmpleado(MySqlConnection conexion, Empleado emp)
+        private static bool ComprobarEmpleado(MySqlConnection conexion, string nif)
         {
-            string empleadoExiste = $"SELECT * FROM empleado WHERE emplado.nif";
 
-            MySqlCommand comando 
-            string consulta = $"INSERT INTO empleados(nif,nombre,apellidos,administrador) VALUES ('{emp.nif}','{emp.nombre}','{emp.apellidos}',{emp.Administrador});";
+            string consulta = String.Format("SELECT * FROM usuarios WHERE nif LIKE '{0}';",nif);
+
 
             MySqlCommand comando = new MySqlCommand(consulta, conexion);
-
-            return comando.ExecuteNonQuery();
+            MySqlDataReader reader = comando.ExecuteReader();
+            if (reader.HasRows)
+            {
+                reader.Close();
+                return false; //ya existe
+            }
+            else
+            {
+                reader.Close();
+                return true;//no exixte
+            }
         }
+        public static bool AgregarEmpleado(MySqlConnection conexion,Empleado emp)
+        { 
+            if (ComprobarEmpleado(conexion, emp.nif))
+            {
+                string consulta = $"INSERT INTO usuarios (nif,nombre,apellidos,administrador,contraseña)" +  
+                    $"VALUES ('{emp.nif}','{emp.nombre}','{emp.apellidos}',{emp.administrador},'{emp.contraseña}')";
 
-
+                MySqlCommand comando = new MySqlCommand(consulta, conexion);
+                int result = comando.ExecuteNonQuery();
+                if (result > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
+
+
 }

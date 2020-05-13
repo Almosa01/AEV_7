@@ -25,72 +25,39 @@ namespace aev7
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            int resultado = 0;
+            if (Empleado.ComprobarDni(txtNif.Text.ToUpper()))
+            {
+                try
+                {
+                    if (ConexionBD.AbrirConexion())
+                    {
+                        Empleado emp = new Empleado();
+                        emp.Nif = txtNif.Text;
+                        emp.Nombre = txtNombre.Text;
+                        emp.Apellidos = txtApellido.Text;
+                        if (checkBox1.Checked)
+                            emp.Administrador = 1;
+                        else
+                            emp.Administrador = 0;
 
-            //try
-            //{
-            //    if (ConexionBD.AbrirConexion())
-            //    {
-            //        Empleado usu = new Empleado();
-            //        usu.nif = txtDni.Text;
-            //        usu.Nombre = txtNombre.Text;
-            //        usu.Apellidos = txtApellido.Text;
-            //        usu.Administrador = checkBox1.Checked;
-            //        usu.Contrasña = txtContraseña.Text;
+                        emp.Contraseña = txtContraseña.Text;
 
-            //        if (String.IsNullOrEmpty(txtIdentidad.Text))  // Estoy agregando un usuario nuevo
-            //        {
+                        bool empleadoCreado = Empleado.AgregarEmpleado(ConexionBD.Conexion, emp);
 
-            //            if (Usuario.BuscarUsuario(ConexionBD.Conexion, usu.Nombre, usu.Apellidos))
-            //            {
-            //                DialogResult confirmar = MessageBox.Show("Deseas dar de alta al usuario", "Alta", MessageBoxButtons.YesNo);
-            //                if (confirmar == DialogResult.Yes)
-            //                {
-            //                    resultado = usu.AgregarUsuario(ConexionBD.Conexion, usu);
-            //                }
-            //            }
-            //            else
-            //            {
-            //                resultado = usu.AgregarUsuario(ConexionBD.Conexion, usu);
-            //            }
+                        if (empleadoCreado)
+                            MessageBox.Show("Empleado creado.");
+                        else
+                            MessageBox.Show("No se ha podido crear el empleado.");
+                    }
+                    else
+                        MessageBox.Show("No hay conexión con la Base de Datos");
 
-            //        }
-            //        else // Estoy modificando un usuario editado
-            //        {
-            //            usu.IdUsuario = Convert.ToInt16(txtIdentidad.Text);
-            //            resultado = usu.ActualizaUsuario(ConexionBD.Conexion, usu);
-            //        }
-
-            //        if (resultado > 0) // Si se ha agregado o modificado limpiamos las cajas de texto
-            //        {
-            //            txtIdentidad.Clear();
-            //            txtNombre.Clear();
-            //            txtApellidos.Clear();
-            //            txtEmail.Clear();
-            //            txtEdad.Clear();
-            //            dtpFechaNac.Value = DateTime.Now;
-            //            txtCuota.Clear();
-            //        }
-
-            //        // Cierro la conexión
-            //        ConexionBD.CerrarConexion();
-            //        // volvemos a cargar toda la lista de usuarios;
-            //        CargaListaUsuarios();
-
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("No se ha podido abrir la conexión con la Base de Datos");
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message + "\n" + ex.StackTrace);
-            //}
-            //finally  // en cualquier caso cierro la conexión (haya error o no)
-            //{
-            //    ConexionBD.CerrarConexion();
-            //}
+                    ConexionBD.CerrarConexion();
+                }
+                catch { }
+            }
+            else
+                MessageBox.Show("DNI inválido");
         }
 
         private void Mantenimiento_Load(object sender, EventArgs e)
