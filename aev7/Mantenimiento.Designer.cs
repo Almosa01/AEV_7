@@ -222,6 +222,7 @@
             this.Controls.Add(this.dgvEmpleados);
             this.Name = "Mantenimiento";
             this.Text = "Mantenimiento";
+            this.Load += new System.EventHandler(this.Mantenimiento_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmpleados)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.groupBox1.ResumeLayout(false);

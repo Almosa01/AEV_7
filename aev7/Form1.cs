@@ -16,30 +16,42 @@ namespace aev7
         public Form1()
         {
             InitializeComponent();
+            tmrHora.Enabled = true;
+            txtFecha.Text = DateTime.Today.ToString("dd-MM-yyyy");
+
+
+
         }
 
         private void btnMantenimiento_Click(object sender, EventArgs e)
         {
             Mantenimiento mantenimiento1 = new Mantenimiento();
             mantenimiento1.ShowDialog();
+            
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-
+            txtHora.Text = DateTime.Now.ToString("HH:mm:ss");
         }
-        private void CargaListaUsuarios()
+
+        private void btnEntrada_Click(object sender, EventArgs e)
         {
-            string seleccion = "Select * from usuarios";
-            if (bdatos.AbrirConexion())
-            {
-                dgvEmpleados.DataSource = Usuario.BuscarUsuario(bdatos.Conexion, seleccion);
-                bdatos.CerrarConexion();
-            }
+            //if (ConexionBD.AbrirConexion())
+            //{
+            //    ConexionBD.Conexion;
+            //}
+            //ConexionBD.CerrarConexion();
+            pnlOculto.Visible = false;
+            if (Empleado.ComprobarDni(txtDni.Text))
+                MessageBox.Show("Hermano, que voy to fino");
             else
-            {
-                MessageBox.Show("No se ha podido abrir la conexión con la Base de Datos");
-            }
+                MessageBox.Show("Tengo cancerrrrrr");
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            pnlOculto.Visible = true;
         }
     }
 }
