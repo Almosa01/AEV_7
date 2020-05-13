@@ -65,7 +65,7 @@ namespace aev7
         private static bool ComprobarEmpleado(MySqlConnection conexion, string nif)
         {
 
-            string consulta = String.Format("SELECT * FROM usuarios WHERE nif LIKE '{0}';",nif);
+            string consulta = String.Format("SELECT * FROM empleados WHERE nif LIKE '{0}';",nif);
 
 
             MySqlCommand comando = new MySqlCommand(consulta, conexion);
@@ -85,7 +85,7 @@ namespace aev7
         { 
             if (ComprobarEmpleado(conexion, emp.nif))
             {
-                string consulta = $"INSERT INTO usuarios (nif,nombre,apellidos,administrador,contraseña)" +  
+                string consulta = $"INSERT INTO empleados (nif,nombre,apellidos,administrador,`password`)" +  
                     $"VALUES ('{emp.nif}','{emp.nombre}','{emp.apellidos}',{emp.administrador},'{emp.contraseña}')";
 
                 MySqlCommand comando = new MySqlCommand(consulta, conexion);

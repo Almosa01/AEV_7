@@ -9,7 +9,7 @@ namespace aev7
     static class ConexionBD
     {
         // atributo para gestionar la conexión
-        private static MySqlConnection conexion = new MySqlConnection("server=localhost;port=3306;database=evaluacionBD;uid=root;pwd=;");
+        private static MySqlConnection conexion = new MySqlConnection("datasource=127.0.0.1;port=3306;username=root;password=;database=aev7_alvaro;");
 
         // Propiedad para acceder a la conexión
         public static MySqlConnection Conexion { get { return conexion; } }

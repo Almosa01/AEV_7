@@ -8,6 +8,5 @@ namespace aev7
 {
     class Fichaje
     {
-
     }
 }
