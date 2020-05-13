@@ -8,7 +8,6 @@ namespace aev7
 {
     class Fichaje
     {
-        private Empleado mismuertos;
 
     }
 }
