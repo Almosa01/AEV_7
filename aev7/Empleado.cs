@@ -63,7 +63,7 @@ namespace aev7
             return false;
         }
 
-        private static bool ComprobarEmpleado(MySqlConnection conexion, string nif)
+        public static bool ComprobarEmpleado(MySqlConnection conexion, string nif)
         {
             string consulta = String.Format("SELECT * FROM empleados WHERE nif LIKE '{0}';", nif);
 

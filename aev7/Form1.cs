@@ -50,10 +50,16 @@ namespace aev7
 
         private void btnEntrada_Click(object sender, EventArgs e)
         {
-            if (Empleado.ComprobarDni(txtDni.Text))
-                MessageBox.Show("Hermano, que voy to fino");
+            if (ConexionBD.AbrirConexion())
+            {
+                Fichaje.AgregarEntrada(ConexionBD.Conexion, txtDni.Text);
+            }
             else
-                MessageBox.Show("Tengo cancerrrrrr");
+            {
+                MessageBox.Show("No se ha establecido la conexion");
+            }
+            ConexionBD.CerrarConexion();
+
         }
 
         private void btnVolver_Click(object sender, EventArgs e)

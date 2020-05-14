@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 namespace aev7
 {
@@ -64,25 +65,54 @@ namespace aev7
         }
 
 
-        public static bool ComprobarEntrada(MySqlConnection conexion,string nif)
+        public static bool ComprobarSalida(MySqlConnection conexion,string nif)
         {
-                string consulta = String.Format("SELECT entrada FROM fichaje WHERE nif LIKE '{0}';", nif);
+                string consulta = String.Format("SELECT salida FROM fichajes WHERE nif LIKE '{0}';", nif);
 
 
                 MySqlCommand comando = new MySqlCommand(consulta, conexion);
                 MySqlDataReader reader = comando.ExecuteReader();
-                reader.Read();
-                bool entrada = reader.GetBoolean(0);
+            if (reader.HasRows)
+            {
                 reader.Close();
-                return entrada;
+                return true;
+            }
+            else
+            {
+                reader.Close();
+                return false;
+            }
+            
 
         }
-        public static bool AgregarEntrada()
+        public static void AgregarEntrada(MySqlConnection conexion, string nif)
         {
 
-            if (ComprobarEntraa(ConexionBD.Conexion,nif)
+            if (Empleado.ComprobarEmpleado(conexion,nif)==false)
             {
-
+                if (ComprobarSalida(ConexionBD.Conexion, nif)==false)
+                { 
+                    string consulta =$"INSERT INTO fichajes (dia,hora_entrada,entrada,salida,nif)" +
+                    $"VALUES ('{DateTime.Now.ToString("yyyy/MM/dd")}','{DateTime.Now.ToString("HH:mm:ss")}',{1},{0},'{nif}')";
+                    MySqlCommand comando = new MySqlCommand(consulta, conexion);
+                    int  comand = comando.ExecuteNonQuery();
+                    if (comand > 0)
+                    {
+                        MessageBox.Show("El fichaje se ha añadido");
+                    }
+                    else
+                    {
+                        MessageBox.Show("El fichaje no se ha añadido");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Existe un fichaje de entrada sin cerrar (se ha de fichar de salida)");
+                }
+            }
+            else
+            {
+                MessageBox.Show("El DNI no existe en la Base de Datos");
             }
         }
     }
