@@ -11,7 +11,7 @@ namespace aev7
     {
         private int id;
         private string nif;
-        private DateTime fecha;
+        private DateTime dia;
         private TimeSpan hora_entrada;
         private TimeSpan hora_salida;
         private bool salida;
@@ -19,22 +19,22 @@ namespace aev7
 
         public int Id { get { return id; } }
         public string Nif { get { return nif; } }
-        public DateTime Fecha { get { return fecha; } }
+        public DateTime Dia { get { return dia; } }
         public TimeSpan Hora_Entrada { get { return hora_entrada; } set { hora_entrada = value; } }
         public TimeSpan Hora_Salida { get { return hora_salida; } set { hora_salida = value; } }
         public bool Salida { get { return salida; } set { salida = value; } }
         public bool Entrada { get { return entrada; } set { entrada = value; } }
 
 
-        public Fichaje(int id, string nif, DateTime fecha, TimeSpan hora_entrada, TimeSpan hora_salida, bool salida,bool entrada)
+        public Fichaje(int id, DateTime dia, TimeSpan hora_entrada, TimeSpan hora_salida, bool salida,bool entrada ,string nif)
         {
             this.id = id;
-            this.nif = nif;
-            this.fecha = fecha;
+            this.dia = dia;
             this.hora_entrada = hora_entrada;
             this.hora_salida = hora_salida;
             this.salida = salida;
             this.entrada=entrada;
+            this.nif = nif;
 
         }
 
@@ -55,8 +55,7 @@ namespace aev7
             {
                 while (reader.Read())
                 {
-                    Fichaje fich = new Fichaje (reader.GetInt32(0), reader.GetString(1), reader.GetDateTime(2),
-                        reader.GetTimeSpan(3), reader.GetTimeSpan(4), reader.GetBoolean(4), reader.GetBoolean(5));
+                    Fichaje fich = new Fichaje (reader.GetInt32(0), reader.GetDateTime(1), reader.GetTimeSpan(2),reader.GetTimeSpan(3), reader.GetBoolean(4), reader.GetBoolean(4), reader.GetString(5));
                     lista.Add(fich);
                 }
             }
