@@ -37,6 +37,7 @@ namespace aev7
             this.nif = nif;
 
         }
+        public Fichaje() { }
 
 
 
@@ -55,8 +56,20 @@ namespace aev7
             {
                 while (reader.Read())
                 {
-                    Fichaje fich = new Fichaje (reader.GetInt32(0), reader.GetDateTime(1), reader.GetTimeSpan(2),reader.GetTimeSpan(3), reader.GetBoolean(4), reader.GetBoolean(4), reader.GetString(5));
-                    lista.Add(fich);
+                    Fichaje fich = new Fichaje ();
+                    fich.id = reader.GetInt32(0);
+                    fich.dia = reader.GetDateTime(1);
+                    fich.hora_entrada = reader.GetTimeSpan(2);
+                    if (reader.GetTimeSpan(3).ToString()!="")//para saber si es null
+                    {
+                        fich.hora_salida = reader.GetTimeSpan(3);
+                    }
+                    else
+                    {
+                        fich.hora_salida = TimeSpan.MinValue;
+
+
+                    }
                 }
             }
 
@@ -116,3 +129,17 @@ namespace aev7
         }
     }
 }
+
+
+//(reader.GetInt32(0), reader.GetDateTime(1), reader.GetTimeSpan(2),reader.GetTimeSpan(3), reader.GetBoolean(4), reader.GetBoolean(4), reader.GetString(5));
+//lista.Add(fich)
+
+
+
+//int i = dataGridView1.Rows.Add();
+
+
+//    if (fich.hora_salida == TimeSpan.MinValue)
+//    dataGridView1.Rows[i].Cells[2].Value = "NULL";
+//else
+//    dataGridView1.Rows[i].Cells[2].Value = fich.hora_salida;

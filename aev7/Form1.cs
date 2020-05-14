@@ -16,6 +16,7 @@ namespace aev7
         public Form1()
         {
             InitializeComponent();
+
             tmrHora.Enabled = true;
             txtFecha.Text = DateTime.Today.ToString("dd-MM-yyyy");
 
@@ -65,6 +66,11 @@ namespace aev7
         private void btnVolver_Click(object sender, EventArgs e)
         {
             pnlOculto.Visible = true;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
