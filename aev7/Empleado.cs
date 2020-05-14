@@ -33,7 +33,7 @@ namespace aev7
 
 
 
-        public Empleado(string ni,string nom, string apell, byte admin,string contra)
+        public Empleado(string ni, string nom, string apell, byte admin, string contra)
         {
             nif = ni;
             nombre = nom;
@@ -58,14 +58,14 @@ namespace aev7
                     if (letrilla == letras[int.Parse(nif.Substring(0, 8)) % 23].ToString())
                         return true;
                 }
-            } catch { }
+            }
+            catch { }
             return false;
         }
 
         private static bool ComprobarEmpleado(MySqlConnection conexion, string nif)
         {
-
-            string consulta = String.Format("SELECT * FROM empleados WHERE nif LIKE '{0}';",nif);
+            string consulta = String.Format("SELECT * FROM empleados WHERE nif LIKE '{0}';", nif);
 
 
             MySqlCommand comando = new MySqlCommand(consulta, conexion);
@@ -81,11 +81,12 @@ namespace aev7
                 return true;//no exixte
             }
         }
-        public static bool AgregarEmpleado(MySqlConnection conexion,Empleado emp)
-        { 
+
+        public static bool AgregarEmpleado(MySqlConnection conexion, Empleado emp)
+        {
             if (ComprobarEmpleado(conexion, emp.nif))
             {
-                string consulta = $"INSERT INTO empleados (nif,nombre,apellidos,administrador,`password`)" +  
+                string consulta = $"INSERT INTO empleados (nif,nombre,apellidos,administrador,`password`)" +
                     $"VALUES ('{emp.nif}','{emp.nombre}','{emp.apellidos}',{emp.administrador},'{emp.contraseña}')";
 
                 MySqlCommand comando = new MySqlCommand(consulta, conexion);
@@ -93,7 +94,7 @@ namespace aev7
                 if (result > 0)
                 {
                     return true;
-                }   
+                }
                 return false;
             }
             else
@@ -101,6 +102,70 @@ namespace aev7
                 return false;
             }
         }
+        public static bool EliminaEmpleado(MySqlConnection conexion, Empleado emp)
+        {
+            if (ComprobarEmpleado(conexion, emp.nif) == false)
+            {
+                string consulta = $"DELETE FROM empleados WHERE nif='{emp.nif}'";
+
+                MySqlCommand comando = new MySqlCommand(consulta, conexion);
+                int result = comando.ExecuteNonQuery();
+                if (result > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static List<Empleado> BuscarEmpleado(MySqlConnection conexion, string consulta)
+        {
+            List<Empleado> lista = new List<Empleado>();
+
+
+            MySqlCommand comando = new MySqlCommand(consulta, conexion);
+
+
+            MySqlDataReader reader = comando.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Empleado emp = new Empleado(reader.GetString(0), reader.GetString(1), reader.GetString(2),
+                        reader.GetByte(3), reader.GetString(4));
+                    lista.Add(emp);
+                }
+            }
+
+            return lista;
+        }
+
+        public static bool ComprobarAdmin(MySqlConnection conexion, string nif)
+        {
+            if (Empleado.ComprobarEmpleado(conexion, nif) == false)
+            {
+                string consulta = String.Format("SELECT administrador FROM empleados WHERE nif LIKE '{0}';", nif);
+
+
+                MySqlCommand comando = new MySqlCommand(consulta, conexion);
+                MySqlDataReader reader = comando.ExecuteReader();
+                reader.Read();
+                bool admin = reader.GetBoolean(0);
+                reader.Close();
+                return admin;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+
     }
 
 

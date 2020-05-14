@@ -15,8 +15,37 @@ namespace aev7
         public Mantenimiento()
         {
             InitializeComponent();
+            CargaListaEmpleados();
+            CargaListaFichajes();
 
         }
+        private void CargaListaEmpleados()
+        {
+            string seleccion = "Select * from empleados";
+            if (ConexionBD.AbrirConexion())
+            {
+                dgvEmpleados.DataSource = Empleado.BuscarEmpleado(ConexionBD.Conexion, seleccion);
+                ConexionBD.CerrarConexion();
+            }
+            else
+            {
+                MessageBox.Show("No se ha podido abrir la conexión con la Base de Datos");
+            }
+        }
+        private void CargaListaFichajes()
+        {
+            string seleccion = "Select * from fichajes";
+            if (ConexionBD.AbrirConexion())
+            {
+                dataGridView2.DataSource = Fichaje.BuscarFichaje(ConexionBD.Conexion, seleccion);
+                ConexionBD.CerrarConexion();
+            }
+            else
+            {
+                MessageBox.Show("No se ha podido abrir la conexión con la Base de Datos");
+            }
+        }
+
 
         private void btnCerrar_Click(object sender, EventArgs e)
         {
@@ -60,22 +89,46 @@ namespace aev7
                 MessageBox.Show("DNI inválido");
         }
 
+
+
+
         private void Mantenimiento_Load(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (Empleado.ComprobarDni(txtNif.Text.ToUpper()))
+            {
+                try
+                {
+                    if (ConexionBD.AbrirConexion())
+                    {
+                        Empleado emp = new Empleado();
+                        emp.Nif = txtNif.Text;
+                        bool empleadoEliminado = Empleado.EliminaEmpleado(ConexionBD.Conexion, emp);
+
+                        if (empleadoEliminado)
+                            MessageBox.Show("Empleado eliminado.");
+                        else
+                            MessageBox.Show("No se ha podido eliminado el empleado.");
+                    }
+                    else
+                        MessageBox.Show("No hay conexión con la Base de Datos");
+
+                    ConexionBD.CerrarConexion();
+                }
+                catch { }
+            }
+            else
+                MessageBox.Show("DNI inválido");
+        }
+        
+        private void button1_Click(object sender, EventArgs e)
         {
 
         }
-        //private void CargaListaUsuarios()
-        //{
-        //    string seleccion = "Select * from usuarios";
-        //    if (ConexionBD.AbrirConexion())
-        //    {
-        //        dgvEmpleados.DataSource = Empleado.AgregarEmpleado(ConexionBD.Conexion, seleccion);
-        //        ConexionBD.CerrarConexion();
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("No se ha podido abrir la conexión con la Base de Datos");
-        //    }
-        //}
-    }
+    } 
 }
+  

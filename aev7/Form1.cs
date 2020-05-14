@@ -26,7 +26,20 @@ namespace aev7
         private void btnMantenimiento_Click(object sender, EventArgs e)
         {
             Mantenimiento mantenimiento1 = new Mantenimiento();
-            mantenimiento1.ShowDialog();
+            
+            if (ConexionBD.AbrirConexion())
+            {
+                if (Empleado.ComprobarAdmin(ConexionBD.Conexion, txtDni.Text))
+                {
+                    ConexionBD.CerrarConexion();
+                    mantenimiento1.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("El usuario no es administrador");
+                }
+            }
+            ConexionBD.CerrarConexion();
             
         }
 
@@ -37,12 +50,6 @@ namespace aev7
 
         private void btnEntrada_Click(object sender, EventArgs e)
         {
-            //if (ConexionBD.AbrirConexion())
-            //{
-            //    ConexionBD.Conexion;
-            //}
-            //ConexionBD.CerrarConexion();
-            pnlOculto.Visible = false;
             if (Empleado.ComprobarDni(txtDni.Text))
                 MessageBox.Show("Hermano, que voy to fino");
             else
