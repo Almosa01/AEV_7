@@ -22,18 +22,16 @@ namespace aev7
         public DateTime Dia { get { return dia; } }
         public TimeSpan Hora_Entrada { get { return hora_entrada; } set { hora_entrada = value; } }
         public TimeSpan Hora_Salida { get { return hora_salida; } set { hora_salida = value; } }
-        public bool Salida { get { return salida; } set { salida = value; } }
-        public bool Entrada { get { return entrada; } set { entrada = value; } }
+        public bool Salida {  set { salida = value; } }
+        public bool Entrada { set { entrada = value; } }
 
 
-        public Fichaje(int id, DateTime dia, TimeSpan hora_entrada, TimeSpan hora_salida, bool salida,bool entrada ,string nif)
+        public Fichaje(int id, DateTime dia, TimeSpan hora_entrada, TimeSpan hora_salida,string nif)
         {
             this.id = id;
             this.dia = dia;
             this.hora_entrada = hora_entrada;
             this.hora_salida = hora_salida;
-            this.salida = salida;
-            this.entrada=entrada;
             this.nif = nif;
 
         }
@@ -58,12 +56,11 @@ namespace aev7
                 {
                     Fichaje fich = new Fichaje ();
                     fich.id = reader.GetInt32(0);
-                    fich.nif = reader.GetString(1);
-                    fich.dia = reader.GetDateTime(2);
-                    fich.hora_entrada = reader.GetTimeSpan(3);
+                    fich.dia = reader.GetDateTime(1);
+                    fich.hora_entrada = reader.GetTimeSpan(2);
                     if (reader[3].ToString()!="")//para saber si es null
                     {
-                        fich.hora_salida = reader.GetTimeSpan(4);
+                        fich.hora_salida = reader.GetTimeSpan(3);
                     }
                     else
                     {
@@ -71,6 +68,8 @@ namespace aev7
 
 
                     }
+
+                    fich.nif = reader.GetString(4);
                     lista.Add(fich);
                 }
             }
@@ -81,7 +80,7 @@ namespace aev7
 
         public static bool ComprobarSalida(MySqlConnection conexion,string nif)
         {
-                string consulta = String.Format("SELECT salida FROM fichajes WHERE nif LIKE '{0}';", nif);
+                string consulta = String.Format("SELECT salida FROM fichajes WHERE nif LIKE '{0}' and salida = 0 ;", nif);
 
 
                 MySqlCommand comando = new MySqlCommand(consulta, conexion);
@@ -134,18 +133,18 @@ namespace aev7
 
             if (Empleado.ComprobarEmpleado(conexion, nif) == false)
             {
-                if (ComprobarSalida(ConexionBD.Conexion, nif) == false)
+                if (ComprobarSalida(ConexionBD.Conexion, nif))
                 {
-                    string consulta = $"UPDATE salida SET = 1 WHERE entrada = 1 and nif = '{nif}'";
+                    string consulta = $"UPDATE fichajes SET salida = 1, hora_salida='10:15:31' WHERE nif ='{nif}' AND salida=0";
                     MySqlCommand comando = new MySqlCommand(consulta, conexion);
                     int comand = comando.ExecuteNonQuery();
                     if (comand > 0)
                     {
-                        MessageBox.Show("El fichaje se ha añadido");
+                        MessageBox.Show("La salida se ha añadido");
                     }
                     else
                     {
-                        MessageBox.Show("El fichaje no se ha añadido");
+                        MessageBox.Show("La salida no se ha añadido");
                     }
                 }
                 else
@@ -158,19 +157,10 @@ namespace aev7
                 MessageBox.Show("El DNI no existe en la Base de Datos");
             }
         }
+        public static string CalcularTrabajo(MySqlConnection conexion, TimeSpan horaSalida, TimeSpan horaEntrada)
+        {
+            TimeSpan resultado =  horaSalida.Subtract(horaEntrada);
+            return resultado.ToString();
+        }
     }
 }
-
-
-//(reader.GetInt32(0), reader.GetDateTime(1), reader.GetTimeSpan(2),reader.GetTimeSpan(3), reader.GetBoolean(4), reader.GetBoolean(4), reader.GetString(5));
-//lista.Add(fich)
-
-
-
-//int i = dataGridView1.Rows.Add();
-
-
-//    if (fich.hora_salida == TimeSpan.MinValue)
-//    dataGridView1.Rows[i].Cells[2].Value = "NULL";
-//else
-//    dataGridView1.Rows[i].Cells[2].Value = fich.hora_salida;

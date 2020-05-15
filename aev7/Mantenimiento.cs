@@ -34,7 +34,7 @@ namespace aev7
         }
         private void CargaListaFichajes()
         {
-            string seleccion = "Select * from fichajes";
+            string seleccion = "SELECT id,dia,hora_entrada,hora_salida,nif FROM fichajes";
             if (ConexionBD.AbrirConexion())
             {
                 dataGridView2.DataSource = Fichaje.BuscarFichaje(ConexionBD.Conexion, seleccion);
@@ -127,7 +127,7 @@ namespace aev7
         
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Application.Exit();
         }
     } 
 }
