@@ -72,5 +72,19 @@ namespace aev7
         {
 
         }
+
+        private void btnSalida_Click(object sender, EventArgs e)
+        {
+
+            if (ConexionBD.AbrirConexion())
+            {
+                Fichaje.AgregarSalida(ConexionBD.Conexion, txtDni.Text);
+            }
+            else
+            {
+                MessageBox.Show("No se ha establecido la conexion");
+            }
+            ConexionBD.CerrarConexion();
+        }
     }
 }

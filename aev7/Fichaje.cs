@@ -58,11 +58,12 @@ namespace aev7
                 {
                     Fichaje fich = new Fichaje ();
                     fich.id = reader.GetInt32(0);
-                    fich.dia = reader.GetDateTime(1);
-                    fich.hora_entrada = reader.GetTimeSpan(2);
-                    if (reader.GetTimeSpan(3).ToString()!="")//para saber si es null
+                    fich.nif = reader.GetString(1);
+                    fich.dia = reader.GetDateTime(2);
+                    fich.hora_entrada = reader.GetTimeSpan(3);
+                    if (reader[3].ToString()!="")//para saber si es null
                     {
-                        fich.hora_salida = reader.GetTimeSpan(3);
+                        fich.hora_salida = reader.GetTimeSpan(4);
                     }
                     else
                     {
@@ -70,6 +71,7 @@ namespace aev7
 
 
                     }
+                    lista.Add(fich);
                 }
             }
 
@@ -108,6 +110,35 @@ namespace aev7
                     $"VALUES ('{DateTime.Now.ToString("yyyy/MM/dd")}','{DateTime.Now.ToString("HH:mm:ss")}',{1},{0},'{nif}')";
                     MySqlCommand comando = new MySqlCommand(consulta, conexion);
                     int  comand = comando.ExecuteNonQuery();
+                    if (comand > 0)
+                    {
+                        MessageBox.Show("El fichaje se ha añadido");
+                    }
+                    else
+                    {
+                        MessageBox.Show("El fichaje no se ha añadido");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Existe un fichaje de entrada sin cerrar (se ha de fichar de salida)");
+                }
+            }
+            else
+            {
+                MessageBox.Show("El DNI no existe en la Base de Datos");
+            }
+        }
+        public static void AgregarSalida(MySqlConnection conexion, string nif)
+        {
+
+            if (Empleado.ComprobarEmpleado(conexion, nif) == false)
+            {
+                if (ComprobarSalida(ConexionBD.Conexion, nif) == false)
+                {
+                    string consulta = $"UPDATE salida SET = 1 WHERE entrada = 1 and nif = '{nif}'";
+                    MySqlCommand comando = new MySqlCommand(consulta, conexion);
+                    int comand = comando.ExecuteNonQuery();
                     if (comand > 0)
                     {
                         MessageBox.Show("El fichaje se ha añadido");
